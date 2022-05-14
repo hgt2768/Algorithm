@@ -1,5 +1,6 @@
 package basic.queue;
 
+import java.util.Random;
 import java.util.Scanner;
 
 public class RingBufferQueue {
@@ -71,6 +72,20 @@ public class RingBufferQueue {
         return -1;
     }
 
+    // 일정 수를 더미로 삽입
+    public void insertDummy(RingBufferQueue q, int count) {
+        Random random = new Random();
+        random.setSeed(System.currentTimeMillis());
+
+        try {
+            for (int i = 0; i < count; i++) {
+                q.enQueue(random.nextInt(1000));
+            }
+        } catch (RingBufferQueue.OverflowRingBufferQueueException e) {
+            System.out.println("더 이상 인큐 할 수 없습니다.");
+        }
+    }
+
     // 큐를 비움
     public void clear() {
         num = front = rear = 0;
@@ -101,27 +116,37 @@ public class RingBufferQueue {
         if (num <= 0)
             System.out.println("큐가 비어 있습니다.");
         else {
-            for (int i = 0; i<num; i++)
-                System.out.println(que[(i + front) % max] + " ");
-            System.out.println();
+            int line = 0;
+            for (int i = 0; i < num; i++)
+
+                if (line < 9) {
+                    System.out.print(que[(i + front) % max] + " | ");
+                    line ++;
+                } else {
+                    System.out.print(que[(i + front) % max] + " | ");
+                    System.out.println();
+                    line = 0;
+                }
         }
+        System.out.println("-----------------");
     }
 
     // 큐 확인 프로그램
     public void start(RingBufferQueue q) {
         Scanner sc = new Scanner(System.in);
 
-        while(true) {
+        while (true) {
             System.out.println("현재 데이터 수 : " + q.size() + " / " + q.capacity());
             System.out.println("1. 인큐");
             System.out.println("2. 디큐");
             System.out.println("3. 피크");
             System.out.println("4. 덤프");
-            System.out.println("5. 종료");
+            System.out.println("5. 랜덤 숫자 인큐");
+            System.out.println("6. 종료");
 
             System.out.print("입력 : ");
             int menu = sc.nextInt();
-            if (menu == 5) {
+            if (menu == 6) {
                 break;
             }
 
@@ -160,6 +185,12 @@ public class RingBufferQueue {
 
                 case 4:
                     q.dump();
+                    break;
+
+                case 5:
+                    System.out.print("인큐할 랜덤숫자의 개수 입력 : ");
+                    int count = sc.nextInt();
+                    q.insertDummy(q, count);
                     break;
             }
         }
