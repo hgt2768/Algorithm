@@ -1,3 +1,5 @@
+import basic.queue.RingBufferQueue;
+
 import java.util.Scanner;
 
 public class BasicTest {
@@ -18,6 +20,8 @@ public class BasicTest {
     }
 
     public static void main(String[] args) {
+        RingBufferQueue queue = new RingBufferQueue(64);    // 용량 64개를 가지는 인트형 선형큐 생성
+
         int select = 0;
 
         while (true) {
@@ -34,6 +38,7 @@ public class BasicTest {
 
             switch (select) {
                 case 1:
+                    queue.start(queue);
                     break;
                 case 2:
                     break;
